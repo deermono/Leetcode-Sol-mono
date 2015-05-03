@@ -32,13 +32,13 @@ public:
             if(lists[i])
                 heap.push(lists[i]);
         ListNode dummy(0);
-        ListNode* curNode=&dummy;
+        ListNode* cur=&dummy;
         while(!heap.empty()){
-            curNode->next=heap.top();
+            cur->next=heap.top();
             heap.pop();
-            curNode=curNode->next;
-            if(curNode->next)
-                heap.push(curNode->next);
+            cur=cur->next;
+            if(cur->next)
+                heap.push(cur->next);
         }
         return dummy.next;
     }
