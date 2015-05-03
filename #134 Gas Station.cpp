@@ -22,7 +22,7 @@ using namespace std;
 
 class Solution {
 public:
-    int canCompleteCircuit_I(vector<int> &gas, vector<int> &cost) {
+    int canCompleteCircuit(vector<int> &gas, vector<int> &cost) {
         int start=0, end=gas.size()-1;
         int sum=gas[end]-cost[end];
         while(start<end){
@@ -37,7 +37,7 @@ public:
         return (sum>=0)?start:-1;
     }
     
-    int canCompleteCircuit_II(vector<int> &gas, vector<int> &cost) {
+    int canCompleteCircuit_I(vector<int> &gas, vector<int> &cost) {
         int start=0;
         int sum=0, preNeed=0;
         for(int i=0;i<gas.size();i++){
