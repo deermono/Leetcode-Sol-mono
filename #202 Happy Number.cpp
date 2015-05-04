@@ -24,7 +24,7 @@ class Solution {
 public:
     //检测n的循环中是否会出现4，如果出现4就不是happy number
     //数学证明：任何数在经历一定量的过程后，都会落至[1, 99]的范围中
-    //在此范围内，可以看出，任何非happy number都会进入4的循环中
+    //在此范围内，任何非happy number都会进入4的循环中
     //具体证明见wiki
     bool isHappy(int n) {
         int sum=0;
