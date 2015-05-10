@@ -25,7 +25,7 @@ public:
     //使用double pointer
     ListNode *swapPairs(ListNode *head) {
         //p是指针的指针，也就是存放了head的地址
-        //所以*p就相当于指向h ead
+        //所以*p就相当于指向head
         ListNode **p=&head;
         while (*p && (*p)->next) {
             ListNode *t=(*p)->next;
