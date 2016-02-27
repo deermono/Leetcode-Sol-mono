@@ -26,13 +26,14 @@ public:
     //Time:O(n) Space:O(n)
     vector<int> twoSum(vector<int>& nums, int target) {
         unordered_map<int, int> hash;
-        for(int i=0;i<nums.size();i++){
-            int findNum=target-nums[i];
-            if(hash.find(findNum)!=hash.end()){
-                vector<int> ret={hash[findNum], i+1};
+        for(int i = 0; i < nums.size(); i++){
+            int findNum = target - nums[i];
+            if(hash.find(findNum) != hash.end()){
+                vector<int> ret = {hash[findNum], i + 1};
                 return ret;
             }else
-                hash[nums[i]]=i+1;
+                hash[nums[i]] = i + 1;
         }
+        return {-1, -1};
     }
 };
