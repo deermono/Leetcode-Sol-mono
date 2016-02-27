@@ -28,10 +28,9 @@ public:
         unordered_map<int, int> hash;
         for(int i = 0; i < nums.size(); i++){
             int findNum = target - nums[i];
-            if(hash.find(findNum) != hash.end()){
-                vector<int> ret = {hash[findNum], i + 1};
-                return ret;
-            }else
+            if(hash.find(findNum) != hash.end())
+                return {hash[findNum], i + 1};
+            else
                 hash[nums[i]] = i + 1;
         }
         return {-1, -1};
