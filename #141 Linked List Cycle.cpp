@@ -763,3 +763,43 @@ public:
         }
         return ret.length() == nums.size() ? ret : "";
     }
+
+vector<int> findIntersection_I(vector<int>& nums1, vector<int>& nums2){
+        vector<int> ret;
+        unordered_set<int> rec;
+        for(auto n : nums1)
+            rec.insert(n);
+        for(auto n : nums2){
+            if(rec.count(n)){
+                ret.push_back(n);
+                rec.erase(n);
+            }
+        }
+        return ret;
+    }
+    
+    vector<int> findIntersection_II(vector<int>& nums1, vector<int>& nums2){
+        vector<int> ret;
+        int start = 0, end = nums2.size() - 1;
+        for(auto n : nums1){
+            int index = binary_search(nums2, start, end, n);
+            if(index != -1)
+                ret.push_back(n);
+            if(start > end)
+                break;
+        }
+        return ret;
+    }
+    
+    int binary_search(vector<int>& nums, int& start, int end, int target){
+        while(start <= end){
+            int mid = start + (end - start) / 2;
+            if(nums[mid] < target)
+                start = mid + 1;
+            else if(nums[mid] > target)
+                end = mid - 1;
+            else
+                return mid;
+        }
+        return -1;
+    }
