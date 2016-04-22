@@ -43,6 +43,24 @@ TreeNode* copySymmetric(TreeNode *p){
     return t;
 }
 
+double eatBean(int white, int red){
+    // if w = 0, then p = 0;
+    // if r = 0, and w is not 0, then p = 1
+    // else, p = (w/ (r + w))(p(r, w - 1)) + (r/ (r + w))((w/ (r + w))(p(r, w - 1)) + (r/ (r + w)(p(r - 1, w)))
+    vector<vector<double>> dp(white + 1, vector<double>(red + 1, 0));
+    for(int i = 0; i <= white; i++)
+        dp[i][0] = 1;
+    for(int j = 1; j <= red; j++)
+        dp[0][j] = 0;
+    for(int i = 1; i <= white; i++){
+        for(int j = 1; j <= red; j++){
+            double p1 = ((double)i / (i + j)), p2 = ((double)j / (i + j));
+            dp[i][j] = p1 * dp[i - 1][j] + p2 * (p1 * dp[i - 1][j] + p2 * dp[i][j - 1]);
+        }
+    }
+    return dp[white][red];
+}
+
 int numDistinct(string s, string t) {
     int m = s.length(), n = t.length();
     int dp[m + 1][n + 1];
