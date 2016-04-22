@@ -125,6 +125,23 @@ TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder){
     return root;
 }
 
+TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+    return buildHelper(preorder, 0, inorder, 0, inorder.size() - 1);
+}
+
+TreeNode* buildHelper(vector<int>& preorder, int p, vector<int>& inorder, int start, int end){
+    if(start > end)
+        return NULL;
+    TreeNode *root = new TreeNode(preorder[p]);
+    int pos = 0;
+    for(int i = start; i <= end; i++)
+        if(inorder[i] == preorder[p])
+            pos = i;
+    root->left = buildHelper(preorder, p + 1, inorder, start, pos - 1);
+    root->right = buildHelper(preorder, p + pos - start + 1, inorder, pos + 1, end);
+    return root;
+}
+
 class RNG{
 private:
     double sum = 0;
@@ -142,6 +159,41 @@ public:
     int generate(){
         double num = ((double)rand() / RAND_MAX);
         return rec.upper_bound(num)->second;
+    }
+};
+
+class NestedIterator {
+    stack<NestedInteger> rec;
+public:
+    NestedIterator(vector<NestedInteger> &nestedList) {
+        int n = nestedList.size(); 
+        for(int i = n - 1; i >= 0; i--)
+            rec.push(nestedList[i]);
+    }
+
+    int next() {
+        if(!rec.empty()){
+            int n = rec.top().getInteger();
+            rec.pop();
+            return n;
+        }
+        return -1;
+    }
+
+    bool hasNext() {
+        while(!rec.empty()){
+            if(rec.top().isInteger())
+                return true;
+            else{
+                auto t = rec.top();
+                rec.pop();
+                auto list = t.getList();
+                int n = list.size(); 
+                for(int i = n - 1; i >= 0; i--)
+                    rec.push(list[i]);
+            }
+        }
+        return false;
     }
 };
 
@@ -609,3 +661,84 @@ public:
         it->second.second = history.begin();
     }
 };
+
+unordered_map<string, vector<string>> m;
+
+    vector<string> combine(string word, vector<string> prev){
+        for(int i=0;i<prev.size();++i){
+            prev[i]+=" "+word;
+        }
+        return prev;
+    }
+
+public:
+    vector<string> wordBreak(string s, unordered_set<string>& dict) {
+        if(m.count(s)) return m[s]; //take from memory
+        vector<string> result;
+        if(dict.count(s)){ //a whole string is a word
+            result.push_back(s);
+        }
+        for(int i=1;i<s.size();++i){
+            string word=s.substr(i);
+            if(dict.count(word)){
+                string rem=s.substr(0,i);
+                vector<string> prev=combine(word,wordBreak(rem,dict));
+                result.insert(result.end(),prev.begin(), prev.end());
+            }
+        }
+        m[s]=result; //memorize
+        return result;
+    }
+    
+    int trap(vector<int>& height) {
+        int ret = 0, l = 0, r = 0;
+        int p = 0, q = height.size() - 1;
+        while(p <= q){
+            if(l <= r){
+                if(height[p] >= l)
+                    l = height[p];
+                else
+                    ret += l - height[p];
+                p++;
+            }else{
+                if(height[q] >= r)
+                    r = height[q];
+                else
+                    ret += r - height[q];
+                q--;
+            }
+        }
+        return ret;
+    }
+    
+     string alienOrder(vector<string>& words) {
+        unordered_map<char, set<char>> dict;
+        unordered_map<char, int> nums;
+        string ret = "", s = "";
+        for(auto word : words){
+            for(auto c : word)
+                if(!nums.count(c))
+                    nums[c] = 0;
+            for(int i = 0; i < min(s.length(), word.length()); i++){
+                if(s[i] != word[i] && !dict[s[i]].count(word[i])){
+                    dict[s[i]].insert(word[i]);
+                    nums[word[i]]++;
+                    break;
+                }
+            }
+            s = word;
+        }
+        queue<char> q;
+        for(auto it : nums)
+            if(it.second == 0)
+                q.push(it.first);
+        while(!q.empty()){
+            char prev = q.front();
+            q.pop();
+            ret += prev;
+            for(auto c : dict[prev])
+                if(nums[c]-- == 1)
+                    q.push(c);
+        }
+        return ret.length() == nums.size() ? ret : "";
+    }
