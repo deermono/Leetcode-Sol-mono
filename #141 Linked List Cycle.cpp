@@ -162,6 +162,27 @@ public:
     }
 };
 
+class RNGV{
+private:
+    int sum;
+    map<int, char> rec;
+    
+public:
+    RNGV(vector<pair<char, int>>& nums){
+        sum = 0;
+        for(auto p : nums){
+            sum += p.second;
+            rec[sum] = p.first;
+        }
+        srand(time(0));
+    }
+    
+    char generateRandom(){
+        int num = rand() % sum;
+        return rec.upper_bound(num)->second;
+    }
+};
+
 class NestedIterator {
     stack<NestedInteger> rec;
 public:
